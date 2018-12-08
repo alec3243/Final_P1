@@ -24,6 +24,7 @@ public class Player {
 	Future<Boolean> future2;
 
 	Player(int playerNum) throws UnknownHostException, IOException {
+
 		// connection1 initiates, connection2 waits
 		if (playerNum == 1) {
 			connection1 = new GameConnection(PLAYER1_PORT1, PLAYER2_PORT1);
@@ -58,6 +59,8 @@ public class Player {
 			GameDecision localDecision = GameDecision.getRandom();
 			GameDecision remoteDecision = null;
 			try {
+				// The program only works if I print something right here?????
+				System.out.print(" \b");
 				remoteDecision = sendAndReceive(localDecision);
 				disconnect();
 				close();
