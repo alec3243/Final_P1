@@ -26,14 +26,14 @@ public class Player {
 	Player(int playerNum) throws UnknownHostException, IOException {
 		// connection1 initiates, connection2 waits
 		if (playerNum == 1) {
-			connection1 = new GameConnection(PLAYER1_PORT1, PLAYER2_PORT1, true);
-			connection2 = new GameConnection(PLAYER1_PORT2, PLAYER3_PORT1, true);
+			connection1 = new GameConnection(PLAYER1_PORT1, PLAYER2_PORT1);
+			connection2 = new GameConnection(PLAYER1_PORT2, PLAYER3_PORT1);
 		} else if (playerNum == 2) {
-			connection1 = new GameConnection(PLAYER2_PORT1, PLAYER1_PORT1, true);
-			connection2 = new GameConnection(PLAYER2_PORT2, PLAYER3_PORT2, true);
+			connection1 = new GameConnection(PLAYER2_PORT1, PLAYER1_PORT1);
+			connection2 = new GameConnection(PLAYER2_PORT2, PLAYER3_PORT2);
 		} else if (playerNum == 3) {
-			connection1 = new GameConnection(PLAYER3_PORT1, PLAYER1_PORT2, true);
-			connection2 = new GameConnection(PLAYER3_PORT2, PLAYER2_PORT2, true);
+			connection1 = new GameConnection(PLAYER3_PORT1, PLAYER1_PORT2);
+			connection2 = new GameConnection(PLAYER3_PORT2, PLAYER2_PORT2);
 		}
 
 		ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -46,13 +46,11 @@ public class Player {
 			Callable<Boolean> {
 		private static final String HOST = "localhost";
 		private int targetPort;
-		private boolean initiates;
 
-		GameConnection(int sourcePort, int targetPort, boolean initiates)
+		GameConnection(int sourcePort, int targetPort)
 				throws UnknownHostException, IOException {
 			super(sourcePort);
 			this.targetPort = targetPort;
-			this.initiates = initiates;
 		}
 
 		@Override
@@ -60,11 +58,7 @@ public class Player {
 			GameDecision localDecision = GameDecision.getRandom();
 			GameDecision remoteDecision = null;
 			try {
-				if (initiates) {
-					remoteDecision = sendAndReceive(localDecision);
-				} else {
-					remoteDecision = receiveAndSend(localDecision);
-				}
+				remoteDecision = sendAndReceive(localDecision);
 				disconnect();
 				close();
 			} catch (IOException e) {
@@ -101,26 +95,6 @@ public class Player {
 			receive(response);
 
 			return GameDecision.values()[buf[0]];
-		}
-
-		private GameDecision receiveAndSend(GameDecision localDecision)
-				throws IOException {
-			// Receive the remote GameDecision
-			byte[] buf = new byte[1];
-			DatagramPacket response = new DatagramPacket(buf, buf.length);
-			receive(response);
-			GameDecision remoteDecision = GameDecision.values()[buf[0]];
-
-			// Put the localDecision ordinal value into the buffer
-			buf = new byte[1];
-			buf[0] = (byte) localDecision.ordinal();
-
-			// Pack the buffer into UDP packet, send through socket
-			DatagramPacket out = new DatagramPacket(buf, buf.length,
-					InetAddress.getByName(HOST), targetPort);
-			send(out);
-
-			return remoteDecision;
 		}
 	}
 
