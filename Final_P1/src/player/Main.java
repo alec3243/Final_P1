@@ -7,11 +7,14 @@ import java.util.concurrent.ExecutionException;
 public class Main {
 
 	public static void main(String[] args) throws IOException {
-		Scanner in = new Scanner(System.in);
-		System.out.print("Input the number of games to run: ");
-		int gameCount = in.nextInt();
-		in.close();
-		for (int i = 0; i < gameCount; i++) {
+		if (args.length == 0 || !args[0].matches("[0-9]*")) {
+			System.err
+					.println("Enter number of games to play as a command-line argument.");
+			System.exit(1);
+		}
+		int numGames = Integer.parseInt(args[0]);
+		for (int i = 1; i <= numGames; i++) {
+			System.out.println("Game number " + i + "~~~~~");
 			try {
 				// Establish the 3 players
 				Player p1 = new Player(1);
