@@ -14,19 +14,19 @@ import java.util.concurrent.Future;
 public class Player {
 	private static final int LAUNCHER_PORT = 1999;
 
-	static final int PLAYER1_PORT1 = 2000;
-	static final int PLAYER1_PORT2 = 2001;
-	static final int PLAYER1_OUTPORT = 2010;
+	private static final int PLAYER1_PORT1 = 2000;
+	private static final int PLAYER1_PORT2 = 2001;
+	private static final int PLAYER1_OUTPORT = 2010;
 
-	static final int PLAYER2_PORT1 = 2002;
-	static final int PLAYER2_PORT2 = 2003;
-	static final int PLAYER2_OUTPORT = 2011;
+	private static final int PLAYER2_PORT1 = 2002;
+	private static final int PLAYER2_PORT2 = 2003;
+	private static final int PLAYER2_OUTPORT = 2011;
 
-	static final int PLAYER3_PORT1 = 2004;
-	static final int PLAYER3_PORT2 = 2005;
-	static final int PLAYER3_OUTPORT = 2012;
+	private static final int PLAYER3_PORT1 = 2004;
+	private static final int PLAYER3_PORT2 = 2005;
+	private static final int PLAYER3_OUTPORT = 2012;
 
-	static final String HOST = "localhost";
+	private static final String HOST = "localhost";
 
 	public static void main(String[] args) throws NumberFormatException,
 			UnknownHostException, IOException, InterruptedException,
@@ -36,8 +36,8 @@ public class Player {
 
 	private Callable<Boolean> connection1;
 	private Callable<Boolean> connection2;
-	Future<Boolean> future1;
-	Future<Boolean> future2;
+	private Future<Boolean> future1;
+	private Future<Boolean> future2;
 
 	Player(int playerNum) throws UnknownHostException, IOException,
 			InterruptedException, ExecutionException {
